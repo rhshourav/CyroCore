@@ -1,3 +1,7 @@
+"""
+CyroCoreBot - Telegram bot for executing commands remotely
+Author: rhshourav
+"""
 import sqlite3
 import subprocess
 import logging
