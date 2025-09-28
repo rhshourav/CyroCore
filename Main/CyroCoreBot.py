@@ -1,5 +1,5 @@
 """
-CyroCoreBot - Telegram bot for executing commands remotely
+CyroCoreBot - Telegram bot for executing pre-programmed commands
 Author: rhshourav
 """
 import sqlite3
@@ -11,12 +11,25 @@ from telegram.ext import Application, MessageHandler, filters, ContextTypes
 # ===== ENABLE LOGGING =====
 logging.basicConfig(level=logging.INFO)
 
-# ===== LOAD TOKEN =====
+# ===== DATABASE SETUP =====
 DB_FILE = "credentials.db"
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
+
+# Table for bot token
 c.execute("CREATE TABLE IF NOT EXISTS tokens (id INTEGER PRIMARY KEY, token TEXT)")
+
+# Table for pre-programmed commands
+c.execute("""
+CREATE TABLE IF NOT EXISTS commands (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT UNIQUE NOT NULL,
+    command TEXT NOT NULL
+)
+""")
 conn.commit()
+
+# ===== LOAD TELEGRAM TOKEN =====
 c.execute("SELECT token FROM tokens WHERE id=1")
 row = c.fetchone()
 if row:
@@ -25,6 +38,7 @@ else:
     TELEGRAM_TOKEN = input("Enter your Telegram bot token: ").strip()
     c.execute("INSERT INTO tokens (id, token) VALUES (1, ?)", (TELEGRAM_TOKEN,))
     conn.commit()
+
 conn.close()
 
 # ===== BOT APP =====
@@ -33,16 +47,29 @@ telegram_app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 # ===== ASYNC HANDLER =====
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle Telegram messages and run commands asynchronously."""
+    """Handle Telegram messages and run pre-programmed or custom commands."""
     text = update.message.text.strip()
     chat_id = update.effective_chat.id
 
     logging.info(f"📩 Received: {text}")
 
     if text.lower().startswith("cmd "):
-        command = text[4:]  # remove 'cmd '
+        cmd_name = text[4:]  # remove 'cmd '
 
-        logging.info(f"⚡ Running command: {command}")
+        # Check if the command exists in database
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute("SELECT command FROM commands WHERE name=?", (cmd_name,))
+        row = c.fetchone()
+        conn.close()
+
+        if row:
+            command = row[0]
+            logging.info(f"⚡ Running pre-programmed command: {command}")
+        else:
+            # Use the text as a shell command if not found
+            command = cmd_name
+            logging.info(f"⚡ Running custom command: {command}")
 
         try:
             # Run command asynchronously
@@ -61,6 +88,21 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         # Telegram message limit is 4096 chars
         await update.message.reply_text(output[:4000])
+
+    elif text.lower().startswith("addcmd "):
+        # Add new pre-programmed command
+        try:
+            parts = text[7:].split("|", 1)
+            name = parts[0].strip()
+            command = parts[1].strip()
+            conn = sqlite3.connect(DB_FILE)
+            c = conn.cursor()
+            c.execute("INSERT OR REPLACE INTO commands (name, command) VALUES (?, ?)", (name, command))
+            conn.commit()
+            conn.close()
+            await update.message.reply_text(f"✅ Command '{name}' added successfully!")
+        except Exception as e:
+            await update.message.reply_text(f"❌ Failed to add command: {e}")
 
     else:
         # Reply to normal messages
