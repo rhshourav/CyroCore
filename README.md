@@ -4,8 +4,19 @@
   <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cyroCroeLogo_git.png" alt="CyroCore Logo" width="150"/>
 </p>
 
+
 # <p align="center">🤖 **Cyro**Core™️</p>
 
+ <p align="center">
+  <!-- Build / Status -->
+  <img src="https://img.shields.io/badge/status-active-brightgreen" alt="Status">
+  <!-- Python Version -->
+  <img src="https://img.shields.io/badge/python-3.10-blue" alt="Python">
+  <!-- License -->
+  <img src="https://img.shields.io/badge/license-MIT-orange" alt="License">
+  <!-- Telegram Bot -->
+  <img src="https://img.shields.io/badge/Telegram-Bot-blue" alt="Telegram Bot">
+</p>
 
 A Python-based Telegram bot that:
 - Stores credentials, tokens, logs, and pre-stored commands in SQLite databases.
