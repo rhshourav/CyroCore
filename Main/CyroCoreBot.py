@@ -3,13 +3,13 @@ CyroCoreBot - Telegram bot for executing commands remotely
 Author: rhshourav
 """
 import sqlite3
-import subprocess
+import asyncio
 import logging
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
 # ===== ENABLE LOGGING =====
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 # ===== LOAD TOKEN =====
 DB_FILE = "credentials.db"
@@ -31,28 +31,39 @@ conn.close()
 telegram_app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 
-# ===== HANDLER =====
+# ===== ASYNC HANDLER =====
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle a specific Telegram command."""
+    """Handle Telegram messages and run commands asynchronously."""
     text = update.message.text.strip()
-    _chat_id = update.effective_chat.id
+    chat_id = update.effective_chat.id
 
-    logging.info("📩 Received: {text}")
+    logging.info(f"📩 Received: {text}")
 
     if text.lower().startswith("cmd "):
         command = text[4:]  # remove 'cmd '
-        logging.info("⚡ Running command: {command}")
+
+        logging.info(f"⚡ Running command: {command}")
+
         try:
-            result = subprocess.run(
-                command, shell=True, capture_output=True, text=True, check=True
+            # Run command asynchronously
+            proc = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
             )
-            output = result.stdout if result.stdout else result.stderr
-            if not output.strip():
+            stdout, stderr = await proc.communicate()
+            output = stdout.decode().strip() if stdout else stderr.decode().strip()
+
+            if not output:
                 output = "✅ Command executed (no output)"
         except Exception as e:
             output = f"❌ Error: {e}"
-        await update.message.reply_text(output[:4000])  # Telegram limit
+
+        # Telegram message limit is 4096 chars
+        await update.message.reply_text(output[:4000])
+
     else:
+        # Reply to normal messages
         await update.message.reply_text(f"You said: {text}")
 
 
