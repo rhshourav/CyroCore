@@ -1,10 +1,11 @@
 """
-CyroCoreBot - Telegram bot for executing pre-programmed commands
+CyroCoreBot - Telegram bot with pre-programmed commands and logging
 Author: rhshourav
 """
 import sqlite3
 import asyncio
 import logging
+from datetime import datetime
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
@@ -25,6 +26,17 @@ CREATE TABLE IF NOT EXISTS commands (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
     command TEXT NOT NULL
+)
+""")
+
+# Table for command logs
+c.execute("""
+CREATE TABLE IF NOT EXISTS logs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    command_name TEXT,
+    command TEXT,
+    output TEXT,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
 )
 """)
 conn.commit()
@@ -61,7 +73,6 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         c = conn.cursor()
         c.execute("SELECT command FROM commands WHERE name=?", (cmd_name,))
         row = c.fetchone()
-        conn.close()
 
         if row:
             command = row[0]
@@ -86,6 +97,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             output = f"❌ Error: {e}"
 
+        # Save log to database
+        c.execute(
+            "INSERT INTO logs (command_name, command, output) VALUES (?, ?, ?)",
+            (cmd_name if row else None, command, output),
+        )
+        conn.commit()
+        conn.close()
+
         # Telegram message limit is 4096 chars
         await update.message.reply_text(output[:4000])
 
@@ -103,6 +122,19 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"✅ Command '{name}' added successfully!")
         except Exception as e:
             await update.message.reply_text(f"❌ Failed to add command: {e}")
+
+    elif text.lower() == "listcmd":
+        # List all saved commands
+        conn = sqlite3.connect(DB_FILE)
+        c = conn.cursor()
+        c.execute("SELECT name, command FROM commands")
+        rows = c.fetchall()
+        conn.close()
+        if rows:
+            msg = "\n".join([f"{name} → {cmd}" for name, cmd in rows])
+        else:
+            msg = "No commands saved yet."
+        await update.message.reply_text(msg)
 
     else:
         # Reply to normal messages
