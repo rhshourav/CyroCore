@@ -13,7 +13,7 @@
   <!-- Python Version -->
   <img src="https://img.shields.io/badge/python-3.10-blue" alt="Python">
   <!-- License -->
-  <img src="https://img.shields.io/badge/license-MIT-orange" alt="License">
+  <img src="https://img.shields.io/badge/license-GPL 2.0-orange" alt="License">
   <!-- Telegram Bot -->
   <img src="https://img.shields.io/badge/Telegram-Bot-blue" alt="Telegram Bot">
 </p>
