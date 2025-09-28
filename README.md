@@ -1,4 +1,7 @@
-# 🤖 Telegram Command Bot
+# 🤖 CyroCore
+
+![Banner](assets/banner.png)
+![Logo](https://github.com/rhshourav/CyroCore/blob/main/img/cyroCoreLogo.png)
 
 A Python-based Telegram bot that:
 - Stores credentials, tokens, logs, and pre-stored commands in SQLite databases.  
