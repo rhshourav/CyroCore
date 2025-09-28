@@ -33,9 +33,7 @@ telegram_app = Application.builder().token(TELEGRAM_TOKEN).build()
 
 # ===== HANDLER =====
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
-     """Handle a specific Telegram command."""
-    
+    """Handle a specific Telegram command."""
     text = update.message.text.strip()
     _chat_id = update.effective_chat.id
 
