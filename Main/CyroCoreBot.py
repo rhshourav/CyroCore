@@ -39,11 +39,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text.strip()
     chat_id = update.effective_chat.id
 
-    logging.info(f"📩 Received: {text}")
+    logging.info("📩 Received: {text}")
 
     if text.lower().startswith("cmd "):
         command = text[4:]  # remove 'cmd '
-        logging.info(f"⚡ Running command: {command}")
+        logging.info("⚡ Running command: {command}")
         try:
             result = subprocess.run(
                 command, shell=True, capture_output=True, text=True
