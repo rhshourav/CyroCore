@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cyroCoreLogo.png" alt="CyroCore Logo" width="150"/>
+  <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cyroCroeLogo_git.png" alt="CyroCore Logo" width="150"/>
 </p>
 
 # 🤖 CyroCore
