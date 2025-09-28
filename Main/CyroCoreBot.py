@@ -37,7 +37,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
      """Handle a specific Telegram command."""
     
     text = update.message.text.strip()
-    chat_id = update.effective_chat.id
+    _chat_id = update.effective_chat.id
 
     logging.info("📩 Received: {text}")
 
@@ -46,7 +46,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.info("⚡ Running command: {command}")
         try:
             result = subprocess.run(
-                command, shell=True, capture_output=True, text=True
+                command, shell=True, capture_output=True, text=True, check=True
             )
             output = result.stdout if result.stdout else result.stderr
             if not output.strip():
