@@ -1,8 +1,11 @@
-# 🤖 CyroCore
+
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cyroCroeLogo_git.png" alt="CyroCore Logo" width="150"/>
 </p>
+
+# <p align="center">🤖 **Cyro**Core™️</p>
+
 
 A Python-based Telegram bot that:
 - Stores credentials, tokens, logs, and pre-stored commands in SQLite databases.
