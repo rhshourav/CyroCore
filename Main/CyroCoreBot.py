@@ -5,6 +5,7 @@ Author: rhshourav
 import sqlite3
 import asyncio
 import logging
+import os
 from datetime import datetime
 from telegram import Update
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
@@ -13,7 +14,9 @@ from telegram.ext import Application, MessageHandler, filters, ContextTypes
 logging.basicConfig(level=logging.INFO)
 
 # ===== DATABASE SETUP =====
-DB_FILE = "credentials.db"
+os.makedirs("db", exist_ok=True)  # ✅ ensure 'db/' folder exists
+
+DB_FILE = "db/credentials.db"
 conn = sqlite3.connect(DB_FILE)
 c = conn.cursor()
 
