@@ -208,3 +208,6 @@ __marimo__/
 *.db #ignore all the Database files.
 /Main/credentials.db
 /Main/db/credentials.db
+/Main/db/commands.db
+/Main/db/logs.db
+/Main/db/tokens.db
