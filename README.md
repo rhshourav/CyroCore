@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cyroCroeLogo_git.png" alt="CyroCore Logo" width="150"/>
+  <img src="https://raw.githubusercontent.com/rhshourav/CyroCore/CyroBranch/img/cryoCroeLogo_git.png" alt="CryoCore Logo" width="150"/>
 </p>
 
 
@@ -78,13 +78,13 @@ A Python-based Telegram bot that:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/rhshourav/CyroCore.git
-   cd CyroCore
+   git clone https://github.com/rhshourav/CryoCore.git
+   cd CryoCore
    ```
 
 2. Run the bot:
    ```bash
-   python CyroCoreBot.py
+   python CryoCoreBot.py
    ```
 
 3. Use Telegram commands:
