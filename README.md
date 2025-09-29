@@ -5,7 +5,7 @@
 </p>
 
 
-# <p align="center">🤖 **Cyro**Core™️</p>
+# <p align="center">🤖 **Cryo**Core™️</p>
 
  <p align="center">
   <!-- Build / Status -->
