@@ -1,4 +1,4 @@
-# CryoCoreBot Improvement Roadmap
+# CryoCoreBot Improvement List
 
 Your existing bot is a powerful foundation for a remote executor, but it's currently highly vulnerable. The immediate focus must be **security**, followed by **usability** and **advanced features**.
 
